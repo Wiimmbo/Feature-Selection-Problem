@@ -16,7 +16,7 @@ def test_realDE():
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
-    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  # 10 primeros números primos
+    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  
     
     data_path = ROOT_DIR + '/data/listings.csv'
     
@@ -45,7 +45,7 @@ def test_combDE():
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
-    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  # 10 primeros números primos
+    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  
     
     data_path = ROOT_DIR + '/data/listings.csv'
     
@@ -74,7 +74,7 @@ def test_PSO():
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
-    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  # 10 primeros números primos
+    seeds = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]  
     
     data_path = ROOT_DIR + '/data/listings.csv'
     
