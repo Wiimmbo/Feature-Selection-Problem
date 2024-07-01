@@ -71,7 +71,7 @@ class Evaluator:
         #Load the data
         self.load_data(data_path, categorical_encoding)
         
-    def load_data(self, data_path, categorical_encoding = None):
+    def load_data(self, data_path: str, categorical_encoding: str = None):
         """
         Load the data from the csv file.
         """
@@ -105,7 +105,7 @@ class Evaluator:
         self.features = X.columns
         self.x_train, self.x_test, self.y_train, self.y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
         
-    def evaluate(self, features):
+    def evaluate(self, features: list) -> float:
         """
         Evaluate the loss function for a subset of features.
         
@@ -135,19 +135,19 @@ class Evaluator:
         return self.loss_function(self.y_test, y_pred)  
     
     # Loss Functions
-    def r2(sefl, y_true, y_pred):
+    def r2(sefl, y_true, y_pred) -> float:
         """
         R2 Loss Function
         """
         return 1 - ((y_true - y_pred)**2).sum() / ((y_true - y_true.mean())**2).sum()
     
-    def rmse(self, y_true, y_pred):
+    def rmse(self, y_true, y_pred) -> float:
         """
         RMSE Loss Function
         """
         return ((y_true - y_pred)**2).mean()**0.5
     
-    def combined(self, y_true, y_pred):
+    def combined(self, y_true, y_pred) -> float:
         """
         Linear combination of R2 and RMSE
         """

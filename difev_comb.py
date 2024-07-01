@@ -68,7 +68,7 @@ class ComibnatorialDifferentialEvolution:
         self.evaluator = evaluator
         self.dimension = len(evaluator.features)
     
-    def optimize(self, generations, population_size, cr, mr, action='minimize'):
+    def optimize(self, generations: int, population_size: int, cr: float, mr: float, action: str = 'minimize'):
         """
         Function to optimize the FSP problem using Differential Evolution.
         

@@ -1,4 +1,3 @@
-#%%
 """
 Test Script
 ================
@@ -16,7 +15,7 @@ from colorama import Fore
 import os
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def test_realDE():
+def test_realDE() -> None:
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
@@ -45,7 +44,7 @@ def test_realDE():
                     #Optimize
                     de.optimize(5, 50, 0.1, 0.1, 0.4, action)
 
-def test_combDE():
+def test_combDE() -> None:
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
@@ -74,7 +73,7 @@ def test_combDE():
                     #Optimize
                     de.optimize(5, 50, 0.1, 0.1, action)
 
-def test_PSO():
+def test_PSO() -> None:
     encoders = ['label', 'target', 'drop']
     loss_functions = ['r2', 'rmse', 'combined']
     regression_models = ['ridge', 'lasso', 'linear']
