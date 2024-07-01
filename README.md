@@ -19,5 +19,5 @@ To test a specific combination of an experiment, you need to first instantiate a
 Evaluator(data_path, encoder, regression_model, loss_function)
 ```
 
-##Notes
+## Notes
 - The index_col='id' option works for the CSV available in the repository. However, you should consider modifying it if you plan to use another dataset.
