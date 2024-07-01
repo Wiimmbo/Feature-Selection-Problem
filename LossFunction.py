@@ -23,7 +23,7 @@ class Evaluator:
     """
     Class for evaluating the subset of features.
     """
-    def __init__(self, data_path: str, regression_model:str , loss_function: str) -> None:
+    def __init__(self, data_path: str, categorical_encoding: str, regression_model:str , loss_function: str) -> None:
         """
         Constructor for the loss function
         
@@ -31,14 +31,13 @@ class Evaluator:
         ----------
         data : str
             Path to the csv file containing the data.
+        categorical_encoding : str
+            The type of encoding to use for the categorical columns.
         regression_model : str
             The regression model to fit.
         loss_function : str
             The loss function to use.
-        """
-        # Load the data 
-        self.load_data(data_path)
-        
+        """        
         # Set the loss function
         if loss_function == 'r2':
             self.loss_function = self.r2
@@ -68,23 +67,36 @@ class Evaluator:
         else:
             raise ValueError('Invalid regression model.')
         
-    def load_data(self, data_path):
+        #Load the data
+        self.load_data(data_path, categorical_encoding)
+        
+    def load_data(self, data_path, categorical_encoding = None):
         """
         Load the data from the csv file.
         """
         #Load the csv
         df = pd.read_csv(data_path)
         
-        #Find the numeric columns
+        #Find the numeric and categorical columns
         numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns
+        categorical_columns = df.select_dtypes(include=['object']).columns
         
-        #Drop the non-numeric columns
-        df = df[numeric_columns]
-        
+        if categorical_encoding == 'target':
+            #Apply target encoding to the categorical columns
+            for column in categorical_columns:
+                df[column] = df.groupby(column)['price'].transform('mean')
+        elif categorical_encoding == 'tag':
+            #Apply tag encoding to the categorical columns
+            for column in categorical_columns:
+                df[column] = df.groupby(column).ngroup()   
+        else:
+            #Drop the non-numeric columns
+            df = df[numeric_columns]
+            
         #Fill the missing values with 0
         for column in df.columns:
             df[column] = df[column].fillna(0)
-        
+            
         #Split the data
         Y = df['price']
         X = df.drop(columns=['price'])
@@ -103,11 +115,11 @@ class Evaluator:
         """
         #Turn features into a boolean arrat umbralized at 0.5
         features = [feature > 0.5 for feature in features]
-        
+
         #Get the selected features
         features = [feature for feature, include in zip(self.features, features) if include]
         X_train = self.x_train[features]
-        
+
         #Fit the model
         self.regression_model.fit(X_train, self.y_train)
         
@@ -137,5 +149,3 @@ class Evaluator:
         """
         return self.r2(y_true, y_pred) + 1/self.rmse(y_true, y_pred)
     
-# %%
-ev = Evaluator(f'{ROOT_DIR}/data/listings.csv', 'ridge', 'rmse')

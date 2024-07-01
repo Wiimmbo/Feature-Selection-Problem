@@ -180,7 +180,7 @@ class PSO:
 
             self.fitness_history.append(self.global_best_fitness)
 
-        self.print_results(t)
+        #self.print_results(t)
 
         return self.global_best_fitness, self.fitness_history
 
@@ -194,16 +194,28 @@ class PSO:
 
 # %%
 evaluator = Evaluator('data/listings.csv', 'linear', 'rmse')
-evaluator.evaluate([1,1,1,1,1,1,1,1,1])
+print(f'All features selected loss: {evaluator.evaluate([1]*9)}')
 
-#%%
 pso = PSO(evaluator)
-features, _ = pso.minimize(100, 100, 0.5, 1, 1, 0)
+best, _ = pso.minimize(100, 30, 0, 0.9, 0.1, 0)
+
 features = pso.global_best_position
 features = [i>0.5 for i in features]
 all_features = evaluator.features
 selected_features = [feature for feature, include in zip(all_features, features) if include]
-print(f'Selected features: {selected_features}')
+
+print(f'Selected features: {selected_features}, Loss - {best}',)
 
 # %%
-# %%
+evaluator = Evaluator('data/listings.csv', 'linear', 'rmse')
+print(f'All features selected loss: {evaluator.evaluate([1]*9)}')
+
+pso = PSO(evaluator)
+best, _ = pso.minimize(100, 30, 0, 0.8, 0.2, 0)
+
+features = pso.global_best_position
+features = [i>0.5 for i in features]
+all_features = evaluator.features
+selected_features = [feature for feature, include in zip(all_features, features) if include]
+
+print(f'Selected features: {selected_features}, Loss - {best}',)
