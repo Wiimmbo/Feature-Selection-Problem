@@ -1,14 +1,13 @@
 #%%
 """
-difev.py
+Real Differential Evolution Module
 Differential Evolution Applied to a combinatorial problem (FSP)
 """
-from LossFunction import Evaluator
+from loss_function import Evaluator
 import numpy as np
 import random
 from colorama import Fore
 import sys
-
 
 class Individual:
     def __init__(self, dimension) -> None:
@@ -27,7 +26,7 @@ class Individual:
         selected_features = [feature for feature, include in zip(all_features, features) if include]
         return selected_features
 
-class DifferentialEvolution:
+class RealDifferentialEvolution:
     def __init__(self, evaluator: Evaluator) -> None:
         """
         Constructor for the Differential Evolution class.
@@ -49,13 +48,14 @@ class DifferentialEvolution:
 
         #Initial evaluation
         for individual in self.population:
-           
             individual.evaluate(self.evaluator)
+            if individual.value is None:
+                individual.value = np.inf if action == 'minimize' else -np.inf
 
         #Main loop
-        for i in range(generations):
+        for g in range(generations):
             
-            print(Fore.WHITE + f'\nGeneration {i+1}/{generations}')
+            print(Fore.WHITE + f'\nGeneration {g+1}/{generations}')
             replaces = 0
             for i, target in enumerate(self.population):
                 progress = int((i / population_size) * 25)
@@ -71,6 +71,16 @@ class DifferentialEvolution:
                 #Create trial vector
                 trial = self.population[r1].features + f*(self.population[r2].features - self.population[r3].features)
                 
+                
+                #Cross-over
+                fixed = random.randint(0, self.dimension)
+                
+                for j, feature in enumerate(trial):
+                    if random.uniform(0, 1) >= cr or feature == fixed:
+                        pass
+                    else:
+                        feature = target.features[j]
+                
                 #Mutate the trial vector
                 for j, feature in enumerate(trial):
                     if random.uniform(0, 1) < mr:
@@ -79,17 +89,10 @@ class DifferentialEvolution:
                 #Fix the trial vector
                 trial = np.clip(trial, 0, 1)
                 
-                #Cross-over
-                fixed = random.randint(0, self.dimension)
-                
-                for j, feature in enumerate(trial):
-                    if random.uniform(0, 1) < cr or feature == fixed:
-                        pass
-                    else:
-                        feature = target.features[j]
-                
                 #Evaluate the trial
                 trial_fitness = self.evaluator.evaluate(trial)
+                if trial_fitness is None:
+                    trial_fitness = np.inf if action == 'minimize' else -np.inf
                 
                 if action == 'minimize':
                     if trial_fitness < target.value:
@@ -106,16 +109,6 @@ class DifferentialEvolution:
                 
                 sys.stdout.write("\r{}/{} [{}{}{}] - Selected Features: {} - Loss: {} - Target Replaces: {}".format(i+1, population_size, "=" * progress, ">" , " " * (25 - progress), self.population[best].getFeatures(self.evaluator), self.population[best].value, replaces))
                 sys.stdout.flush()
-       
-        print('\n')
-        print('-'*150)        
-        print(f'\nSelected features: {self.population[best].getFeatures(self.evaluator)} \nLoss: {self.population[best].value}',)
+             
+        print(Fore.GREEN + f'\nSelected features: {self.population[best].getFeatures(self.evaluator)} \nLoss: {self.population[best].value}',)
 
-# %%
-evaluator = Evaluator('data/listings.csv', 'target', 'linear', 'r2')
-print(f'All features selected loss: {evaluator.evaluate([1]*9)}')
-difev = DifferentialEvolution(evaluator)
-difev.optimize(3, 50, 0.2, 0.1, 0.6, 'maximize')
-
-
-# %%

@@ -12,6 +12,10 @@ from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
 from sklearn.linear_model import LinearRegression
 
+#Disable warnings
+import warnings
+warnings.filterwarnings("ignore")
+
 #Data split
 from sklearn.model_selection import train_test_split
 
@@ -75,7 +79,7 @@ class Evaluator:
         Load the data from the csv file.
         """
         #Load the csv
-        df = pd.read_csv(data_path)
+        df = pd.read_csv(data_path, index_col='id')
         
         #Find the numeric and categorical columns
         numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns
@@ -85,8 +89,8 @@ class Evaluator:
             #Apply target encoding to the categorical columns
             for column in categorical_columns:
                 df[column] = df.groupby(column)['price'].transform('mean')
-        elif categorical_encoding == 'tag':
-            #Apply tag encoding to the categorical columns
+        elif categorical_encoding == 'label':
+            #Apply label encoding to the categorical columns
             for column in categorical_columns:
                 df[column] = df.groupby(column).ngroup()   
         else:
@@ -115,7 +119,11 @@ class Evaluator:
         """
         #Turn features into a boolean arrat umbralized at 0.5
         features = [feature > 0.5 for feature in features]
-
+        
+        #If no features are selected, return None
+        if not any(features):
+            return None
+        
         #Get the selected features
         features = [feature for feature, include in zip(self.features, features) if include]
         X_train = self.x_train[features]
@@ -148,4 +156,5 @@ class Evaluator:
         Linear combination of R2 and RMSE
         """
         return self.r2(y_true, y_pred) + 1/self.rmse(y_true, y_pred)
-    
+
+# %%
