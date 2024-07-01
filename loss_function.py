@@ -1,8 +1,9 @@
-#%%
 """
 Loss Function Module
 ====================
-This module contains the loss function class for the FSP optimization problem.
+This module contains the Evaluator class for the FSP optimization problem.
+    >Note: The warnings are disabled because the ridge model throws a warning on every fit.
+    >Note: The regression models settings are taken from the paper "P. Cunningham, B. Kathirgamaranathan, and S. J. Delany, ''Feature Selection Tutorial with Python Examples'', arXiv:2106.06437 [cs.LG], Jun. 2021."
 """
 #Libraries
 import pandas as pd
@@ -19,10 +20,6 @@ warnings.filterwarnings("ignore")
 #Data split
 from sklearn.model_selection import train_test_split
 
-import os
-#Root path
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-#%%
 class Evaluator:
     """
     Class for evaluating the subset of features.
@@ -135,8 +132,7 @@ class Evaluator:
         X_test = self.x_test[features]
         y_pred = self.regression_model.predict(X_test)
         
-        return self.loss_function(self.y_test, y_pred)
-            
+        return self.loss_function(self.y_test, y_pred)  
     
     # Loss Functions
     def r2(sefl, y_true, y_pred):
@@ -156,5 +152,3 @@ class Evaluator:
         Linear combination of R2 and RMSE
         """
         return self.r2(y_true, y_pred) + 1/self.rmse(y_true, y_pred)
-
-# %%

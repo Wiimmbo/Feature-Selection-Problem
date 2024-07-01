@@ -5,12 +5,16 @@ Test Script
 This script tests the search algorithms on the FSP problem.
 """
 #Libraries
-from loss_function import Evaluator, ROOT_DIR
+from loss_function import Evaluator
 from difev_real import RealDifferentialEvolution
 from difev_comb import ComibnatorialDifferentialEvolution
 from pso import PSO
 import numpy as np
 from colorama import Fore
+
+#Root path
+import os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def test_realDE():
     encoders = ['label', 'target', 'drop']
@@ -97,8 +101,13 @@ def test_PSO():
                     else:
                         pso.maximize(50, 15, 0, 0.9, 0.1, np.inf)
 
+def main():
+    """
+    Run the tests
+    """
+    test_realDE()
+#    test_combDE()
+#    test_PSO()
 
-# %%
-test_combDE()
-
-# %%
+if __name__ == '__main__':
+    main()

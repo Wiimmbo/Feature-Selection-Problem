@@ -28,6 +28,7 @@ class Particle:
         position_max : float
             The maximum value for the position.
         """
+        # Randomly initialize the position and velocity
         self.position = np.array([random.uniform(position_min, position_max) for _ in range(dimension)])
         self.velocity = np.zeros(dimension)
         
@@ -50,6 +51,7 @@ class Particle:
         c2 : float
             Social weight.
         """
+        # Random factors
         r1 = random.uniform(0, 1)
         r2 = random.uniform(0, 1)
         
@@ -125,10 +127,13 @@ class PSO:
         self.global_best_fitness = float('inf')
         self.fitness_history = []
         
+        #Iterate over the generations
         for t in range(generations):
             progress = int((t / generations) * 25)
             
+            # Iterate over the particles
             for particle in self.particles:
+                
                 fitness = self.evaluator.evaluate(particle.position)
                 if fitness is None:
                     fitness = np.inf
@@ -161,6 +166,24 @@ class PSO:
         print(Fore.GREEN + f'\nSelected features: {selected_features} \nLoss: {self.global_best_fitness}')
     
     def maximize(self, generations, population_size, w, c1, c2, fitness_criterion):
+        """
+        Function to minimize the loss function using the PSO algorithm.
+        
+        Parameters
+        ----------
+        generations : int
+            The number of generations to run the algorithm.
+        population_size : int
+            The number of particles in the swarm.
+        w : float
+            Inertia weight.
+        c1 : float
+            Cognitive weight.
+        c2 : float
+            Social weight.
+        fitness_criterion : float
+            The fitness value to reach to stop the algorithm.
+        """
         # Hyperparameters
         self.population_size = population_size
         self.w = w
@@ -197,13 +220,16 @@ class PSO:
                 particle.update_position(self.position_min, self.position_max)
 
             self.fitness_history.append(self.global_best_fitness)
+            
+            # Print the progress
             sys.stdout.write("\r{}/{} [{}{}{}]  - Loss: {} ".format(t+1, generations, "=" * progress, ">" , " " * (25 - progress), self.global_best_fitness))
             sys.stdout.flush()
             
-            
+        # Print the selected features   
         features = self.global_best_position
         features = [i>0.5 for i in features]
         all_features = self.evaluator.features
         selected_features = [feature for feature, include in zip(all_features, features) if include]
         
+        #Print results
         print(Fore.GREEN + f'\nSelected features: {selected_features} \nLoss: {self.global_best_fitness}')
