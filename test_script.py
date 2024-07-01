@@ -39,7 +39,7 @@ def test_realDE():
                         action = 'maximize'
                         
                     #Optimize
-                    de.optimize(5, 200, 0.1, 0.1, 0.4, action)
+                    de.optimize(5, 50, 0.1, 0.1, 0.4, action)
 
 def test_combDE():
     encoders = ['label', 'target', 'drop']
@@ -68,7 +68,7 @@ def test_combDE():
                         action = 'maximize'
                         
                     #Optimize
-                    de.optimize(5, 200, 0.1, 0.1, action)
+                    de.optimize(5, 50, 0.1, 0.1, action)
 
 def test_PSO():
     encoders = ['label', 'target', 'drop']
@@ -99,6 +99,6 @@ def test_PSO():
 
 
 # %%
-test_PSO()
+test_combDE()
 
 # %%

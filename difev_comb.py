@@ -107,5 +107,4 @@ class ComibnatorialDifferentialEvolution:
                 
                 sys.stdout.write("\r{}/{} [{}{}{}] - Selected Features: {} - Loss: {} - Target Replaces: {}".format(i+1, population_size, "=" * progress, ">" , " " * (25 - progress), self.population[best].getFeatures(self.evaluator), self.population[best].value, replaces))
                 sys.stdout.flush()
-                
-        print(Fore.GREEN + f'Selected features: {self.population[best].getFeatures(self.evaluator)}, Loss: {self.population[best].value}',)
+        print(Fore.GREEN + f'\nSelected features: {self.population[best].getFeatures(self.evaluator)}, Loss: {self.population[best].value}')
