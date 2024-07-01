@@ -18,6 +18,14 @@ To test a specific combination of an experiment, you need to first instantiate a
 ```python
 Evaluator(data_path, encoder, regression_model, loss_function)
 ```
+Afterward, you can instantiate any of the three search algorithms (PSO, RealDifferentialEvolution, or CombinatorialDifferentialEvolution). 
+
+You will need to pass the evaluator you just instantiated as a parameter. Now, you can use the `.optimize` method for the differential evolution algorithms or the `.minimize` and `.maximize` methods for PSO. Each has its parameters to configure the execution of the search algorithm. It will print the result and the selected features.
+
+```python
+de = RealDifferentialEvolution(evaluator)
+de.optimize(generations, population_size, cr, mr, f, action='minimize')
+```
 
 ## Notes
 - The index_col='id' option works for the CSV available in the repository. However, you should consider modifying it if you plan to use another dataset.
