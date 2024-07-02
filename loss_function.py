@@ -126,8 +126,10 @@ class Evaluator:
         X_train = self.x_train[features]
 
         #Fit the model
-        self.regression_model.fit(X_train, self.y_train)
-        
+        try:
+            self.regression_model.fit(X_train, self.y_train)
+        except:
+            return None
         #Evaluate the model
         X_test = self.x_test[features]
         y_pred = self.regression_model.predict(X_test)

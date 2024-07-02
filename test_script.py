@@ -1,3 +1,4 @@
+#%%
 """
 Test Script
 ================
@@ -104,9 +105,10 @@ def main():
     """
     Run the tests
     """
-    test_realDE()
+#    test_realDE()
 #    test_combDE()
-#    test_PSO()
+    test_PSO()
 
 if __name__ == '__main__':
     main()
+# %%
